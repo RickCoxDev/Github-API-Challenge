@@ -20,6 +20,22 @@ app.get('/users/:userId/followers', (req, res) => {
 
 });
 
+app.get('/users/:userId/repos/stargazers', (req, res) => {
+    // Require authentication
+    if (req.headers.authorization) {
+        const auth = getAuthentication(req.headers.authorization);
+        getRepoStargazers(req.params.userId, auth, 3).then((data) => {
+            // Send success response
+            res.status(200).send(data);
+        }).catch((e) => {
+            // Catch any errors
+            res.status(e.statusCode).send({message: e.message})
+        })
+    } else {
+        res.status(401).send({message: 'Unauthorized'});
+    }
+})
+
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
@@ -76,6 +92,111 @@ async function getFollowers (user, auth, levels = 0) {
                     })
                 }
                 
+            } else {
+                // Something went wrong with the Github API, reject promise
+                reject({
+                    statusCode: response.statusCode,
+                    message: body.message
+                });
+            }
+        })
+    })
+}
+
+async function getRepoStargazers (user, auth, levels = 0) {
+    return new Promise((resolve, reject) => {
+        request.get({
+            url: `https://api.github.com/users/${user}/repos`,
+            auth: auth,
+            headers: {
+                "User-Agent": 'Github-Api-Challenge'
+            },
+            qs: {
+                per_page: 3
+            }
+        }, (error, response, body) => {
+            body = JSON.parse(body);
+
+            if (!error && response.statusCode == 200) {
+                let repos = [];
+
+                // if there are less than 5 followers limit for loop
+                for (let i = 0; i < body.length; i++) {
+                    repos.push({repoName: body[i].name})
+                }
+
+                let promises = [];
+
+                repos.forEach((repo) => {
+                    promises.push(getStargazers(user, repo.repoName, auth, levels > 0 ? levels: 0))
+                })
+
+                Promise.all(promises).then((data) => {
+                    repos.forEach((repo, index) => {
+                        repo.stargazers = data[index];
+                    })
+                    resolve(repos);
+                }).catch((e) => {
+                    reject({
+                        statusCode: e.statusCode ? e.statusCode : 500,
+                        message: e.message
+                    });
+                })
+
+                
+            } else {
+                // Something went wrong with the Github API, reject promise
+                reject({
+                    statusCode: response.statusCode,
+                    message: body.message
+                });
+            }
+        })
+    })
+}
+
+async function getStargazers(user, repo, auth, levels = 0) {
+    return new Promise((resolve, reject) => {
+        request.get({
+            url: `https://api.github.com/repos/${user}/${repo}/stargazers`,
+            auth: auth,
+            headers: {
+                "User-Agent": 'Github-Api-Challenge'
+            },
+            qs: {
+                per_page: 3
+            }
+        }, (error, response, body) => {
+            body = JSON.parse(body);
+
+            if (!error && response.statusCode == 200) {
+                let stargazers = [];
+
+                for (let i = 0; i < body.length; i++) {
+                    stargazers.push({username: body[i].login})
+                }
+
+                if (levels == 0) {
+                    resolve(stargazers);
+                } else {
+                    let promises = [];
+
+                    stargazers.forEach((user) => {
+                        promises.push(getRepoStargazers(user.username, auth, levels-1));
+                    });
+
+                    Promise.all(promises).then((data) => {
+                        stargazers.forEach((user, index) => {
+                            user.repos = data[index];
+                        })
+                        resolve(stargazers);
+                    }).catch((e) => {
+                        reject({
+                            statusCode: e.statusCode ? e.statusCode : 500,
+                            message: e.message
+                        });
+                    });
+                }
             } else {
                 // Something went wrong with the Github API, reject promise
                 reject({

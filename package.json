@@ -1,0 +1,23 @@
+{
+  "name": "github-api-challenge",
+  "version": "0.1.0",
+  "description": "An API to give related data for a Github ID",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RickCoxDev/Github-API-Challenge.git"
+  },
+  "author": "Richard Cox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RickCoxDev/Github-API-Challenge/issues"
+  },
+  "homepage": "https://github.com/RickCoxDev/Github-API-Challenge#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "request": "^2.88.0"
+  }
+}

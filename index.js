@@ -3,6 +3,8 @@ const request = require('request');
 
 const port = 1000;
 
+
+
 app.get('/users/:userId/followers', (req, res) => {
     // Require authentication
     if (req.headers.authorization) {
@@ -21,10 +23,12 @@ app.get('/users/:userId/followers', (req, res) => {
 });
 
 app.get('/users/:userId/repos/stargazers', (req, res) => {
+    let globalRepos = [];
+
     // Require authentication
     if (req.headers.authorization) {
         const auth = getAuthentication(req.headers.authorization);
-        getRepoStargazers(req.params.userId, auth, 3).then((data) => {
+        getRepoStargazers(req.params.userId, auth, globalRepos, 3).then((data) => {
             // Send success response
             res.status(200).send(data);
         }).catch((e) => {
@@ -103,7 +107,7 @@ async function getFollowers (user, auth, levels = 0) {
     })
 }
 
-async function getRepoStargazers (user, auth, levels = 0) {
+async function getRepoStargazers (user, auth, globalRepos, levels = 0) {
     return new Promise((resolve, reject) => {
         request.get({
             url: `https://api.github.com/users/${user}/repos`,
@@ -122,13 +126,18 @@ async function getRepoStargazers (user, auth, levels = 0) {
 
                 // if there are less than 5 followers limit for loop
                 for (let i = 0; i < body.length; i++) {
-                    repos.push({repoName: body[i].name})
+                    let repo = body[i].name
+
+                    if (!globalRepos.includes(repo)) {
+                        repos.push({repoName: repo})
+                        globalRepos.push(repo)
+                    }
                 }
 
                 let promises = [];
 
                 repos.forEach((repo) => {
-                    promises.push(getStargazers(user, repo.repoName, auth, levels > 0 ? levels: 0))
+                    promises.push(getStargazers(user, repo.repoName, auth, globalRepos, levels > 0 ? levels: 0))
                 })
 
                 Promise.all(promises).then((data) => {
@@ -155,7 +164,7 @@ async function getRepoStargazers (user, auth, levels = 0) {
     })
 }
 
-async function getStargazers(user, repo, auth, levels = 0) {
+async function getStargazers(user, repo, auth, globalRepos, levels = 0) {
     return new Promise((resolve, reject) => {
         request.get({
             url: `https://api.github.com/repos/${user}/${repo}/stargazers`,
@@ -182,7 +191,7 @@ async function getStargazers(user, repo, auth, levels = 0) {
                     let promises = [];
 
                     stargazers.forEach((user) => {
-                        promises.push(getRepoStargazers(user.username, auth, levels-1));
+                        promises.push(getRepoStargazers(user.username, auth, globalRepos, levels-1));
                     });
 
                     Promise.all(promises).then((data) => {

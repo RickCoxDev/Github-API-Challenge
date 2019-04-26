@@ -1,9 +1,8 @@
+'use strict'
 const app = require('express')();
 const request = require('request');
 
 const port = 1000;
-
-
 
 app.get('/users/:userId/followers', (req, res) => {
     // Require authentication
@@ -40,9 +39,7 @@ app.get('/users/:userId/repos/stargazers', (req, res) => {
     }
 })
 
-app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
-});
+module.exports = app;
 
 function getAuthentication(authString) {
     let encoded = authString.split(' ')[1];

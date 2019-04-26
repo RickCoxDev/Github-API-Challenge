@@ -30,11 +30,10 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{url}}:1000/users/:user/followers",
+					"raw": "{{url}}/users/:user/followers",
 					"host": [
 						"{{url}}"
 					],
-					"port": "1000",
 					"path": [
 						"users",
 						":user",
@@ -77,11 +76,10 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{url}}:1000/users/:user/repos/stargazers",
+					"raw": "{{url}}/users/:user/repos/stargazers",
 					"host": [
 						"{{url}}"
 					],
-					"port": "1000",
 					"path": [
 						"users",
 						":user",

@@ -3,34 +3,44 @@ const app = require('express')();
 const request = require('request');
 
 app.get('/users/:userId/followers', (req, res) => {
+    console.log(`Request: ${req.url}`);
     // Require authentication
     if (req.headers.authorization) {
         const auth = getAuthentication(req.headers.authorization);
         getFollowersClosure(req.params.userId, auth, 3).then((data) => {
+            console.log(data);
+            console.log('Response: 200');
             // Send success response
             res.status(200).send(data);
         }).catch((e) => {
             // Catch any errors
+            console.error(`Response: ${e.statusCode} - ${e.message}`)
             res.status(e.statusCode).send({message: e.message})
         })
     } else {
+        console.error('Response: 401 - Unauthorized')
         res.status(401).send({message: 'Unauthorized'});
     }
 
 });
 
 app.get('/users/:userId/repos/stargazers', (req, res) => {
+    console.log(`Request: ${req.url}`);
     // Require authentication
     if (req.headers.authorization) {
         const auth = getAuthentication(req.headers.authorization);
         getRepoStargazersClosure(req.params.userId, auth, 2).then((data) => {
+            console.log(data);
+            console.log('Response: 200');
             // Send success response
             res.status(200).send(data);
         }).catch((e) => {
             // Catch any errors
+            console.error(`Response: ${e.statusCode} - ${e.message}`)
             res.status(e.statusCode).send({message: e.message})
         })
     } else {
+        console.error('Response: 401 - Unauthorized')
         res.status(401).send({message: 'Unauthorized'});
     }
 })

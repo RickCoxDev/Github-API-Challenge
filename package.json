@@ -4,7 +4,9 @@
   "description": "An API to give related data for a Github ID",
   "main": "app.js",
   "scripts": {
-    "start": "node app.local.js",
+    "start": "node src/app.local.js",
+    "deploy": "./node_modules/.bin/claudia create --handler lambda.handler --deploy-proxy-api --region us-east-1",
+    "update": "./node_modules/.bin/claudia update",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,5 +23,12 @@
     "aws-serverless-express": "^3.3.6",
     "express": "^4.16.4",
     "request": "^2.88.0"
-  }
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {
+    "claudia": "^5.4.2"
+  },
+  "keywords": []
 }

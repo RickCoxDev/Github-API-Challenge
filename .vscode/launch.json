@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Run Server",
-            "program": "${workspaceFolder}\\index.js"
+            "program": "${workspaceFolder}\\src\\app.local.js"
         }
     ]
 }

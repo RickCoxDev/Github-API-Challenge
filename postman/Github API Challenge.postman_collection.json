@@ -1,0 +1,103 @@
+{
+	"info": {
+		"_postman_id": "304b24ff-a937-4aec-adf2-f460afa52331",
+		"name": "Github API Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Followers",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}:1000/users/:user/followers",
+					"host": [
+						"{{url}}"
+					],
+					"port": "1000",
+					"path": [
+						"users",
+						":user",
+						"followers"
+					],
+					"variable": [
+						{
+							"key": "user",
+							"value": "",
+							"description": "Github user"
+						}
+					]
+				},
+				"description": "Finds a Github user's followers and their followers up to 3 levels deep."
+			},
+			"response": []
+		},
+		{
+			"name": "Repos and Stargazers",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}:1000/users/:user/repos/stargazers",
+					"host": [
+						"{{url}}"
+					],
+					"port": "1000",
+					"path": [
+						"users",
+						":user",
+						"repos",
+						"stargazers"
+					],
+					"variable": [
+						{
+							"key": "user",
+							"value": "",
+							"description": "Github user"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,10 @@
+{
+  "lambda": {
+    "role": "github-api-challenge-executor",
+    "name": "github-api-challenge",
+    "region": "us-east-1"
+  },
+  "api": {
+    "id": "8f6q7lw4p3"
+  }
+}

@@ -21,6 +21,7 @@
   "homepage": "https://github.com/RickCoxDev/Github-API-Challenge#readme",
   "dependencies": {
     "aws-serverless-express": "^3.3.6",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "request": "^2.88.0"
   },

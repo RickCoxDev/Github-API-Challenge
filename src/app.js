@@ -1,6 +1,9 @@
 'use strict'
 const app = require('express')();
+const cors = require('cors')
 const request = require('request');
+
+app.use(cors());
 
 app.get('/users/:userId/followers', (req, res) => {
     console.log(`Request: ${req.url}`);

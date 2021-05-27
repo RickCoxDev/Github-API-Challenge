@@ -1,3 +1,6 @@
+> # Archived
+> This repo was only for a POC. I will not be adding anything.
+
 # Github API Challenge
 This is a simple API project to call the [Github API](https://developer.github.com/v3/). There are two API endpoints in this project. Click on the links below to information related to the endpoints:
 * [Followers Endpoint](https://github.com/RickCoxDev/Github-API-Challenge/blob/master/docs/followers.md)
